@@ -19,7 +19,7 @@ export function Chip({ label, className = "", title, description, bgHex = "#B5E9
 
   const handleMouseEnter = () => {
     gsap.killTweensOf([chipRef.current, cardRef.current, labelRef.current]);
-    
+
     // Slight bump on the container
     gsap.to(chipRef.current, { zIndex: 50, duration: 0 });
 
@@ -78,21 +78,21 @@ export function Chip({ label, className = "", title, description, bgHex = "#B5E9
       onMouseLeave={handleMouseLeave}
       className={`absolute px-3 py-2 rounded-full cursor-pointer flex items-center justify-center transition-colors hover:bg-transparent ${className}`}
     >
-      <span 
-        ref={labelRef} 
-        className="text-[14px] leading-[22px] tracking-[0.002em] font-normal text-foreground whitespace-nowrap z-10"
+      <span
+        ref={labelRef}
+        className="z-10 font-normal text-[14px] text-foreground leading-[22px] tracking-[0.002em] whitespace-nowrap pointer-events-none"
       >
         {label}
       </span>
 
       {title && description && (
-        <div 
-          ref={cardRef} 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] rounded-[24px] p-6 opacity-0 scale-75 pointer-events-none shadow-xl z-20 flex flex-col items-start text-left"
+        <div
+          ref={cardRef}
+          className="top-1/2 left-1/2 z-20 absolute flex flex-col items-start opacity-0 shadow-xl p-6 rounded-[24px] w-[280px] text-left scale-75 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
           style={{ backgroundColor: bgHex, color: textHex }}
         >
-          <h3 className="font-serif text-[24px] mb-3 leading-tight">{title}</h3>
-          <p className="font-sans text-[14px] leading-[1.4] opacity-90">{description}</p>
+          <h3 className="mb-3 font-serif text-[24px] leading-tight">{title}</h3>
+          <p className="opacity-90 font-sans text-[14px] leading-[1.4]">{description}</p>
         </div>
       )}
     </div>

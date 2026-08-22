@@ -5,7 +5,7 @@ import { Chip } from "./Chip";
 
 export function AboutSection() {
   return (
-    <section className="relative w-full bg-white overflow-hidden py-[80px]">
+    <section className="relative w-full bg-white overflow-hidden py-10 md:py-[80px]">
       <InteractiveGrid />
 
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 md:px-[60px]">

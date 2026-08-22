@@ -3,8 +3,13 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Chip } from "./Chip";
 import { InteractiveGrid } from "./InteractiveGrid";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,6 +53,41 @@ export function Hero() {
           },
           "-=0.4"
         );
+
+      // Scroll animations
+      gsap.to(imageRef.current, {
+        y: "20%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      gsap.to(textRef.current, {
+        opacity: 0,
+        y: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "50% top",
+          scrub: true,
+        },
+      });
+
+      gsap.to(chipsRef.current, {
+        y: "-15%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -78,7 +118,7 @@ export function Hero() {
           </div>
 
           {/* Chips */}
-          <div ref={chipsRef} className="hidden md:block absolute inset-0 pointer-events-none">
+          <div ref={chipsRef} className="hidden md:block absolute inset-0 pointer-events-none z-20">
             {/* We enable pointer events only on the chips themselves */}
             <div className="relative w-full h-full pointer-events-none">
               <Chip

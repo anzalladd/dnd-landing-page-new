@@ -5,8 +5,22 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 
 function Dots() {
-  const { size, pointer } = useThree();
+  const { size, gl } = useThree();
   const geomRef = useRef<THREE.BufferGeometry>(null!);
+  const mouse = useRef({ x: -9999, y: -9999 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = gl.domElement.getBoundingClientRect();
+      // Calculate mouse position relative to the center of the canvas in pixels
+      // Three.js Y axis is up, so we invert the Y calculation
+      mouse.current.x = e.clientX - rect.left - rect.width / 2;
+      mouse.current.y = -(e.clientY - rect.top - rect.height / 2);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [gl]);
 
   const spacing = 20; // Spacing between dots
   const cols = Math.ceil(size.width / spacing) + 2;
@@ -60,10 +74,8 @@ function Dots() {
   useFrame(() => {
     if (!geomRef.current) return;
 
-    // pointer is normalized [-1, 1]. Convert to world (Orthographic)
-    const mouseX = (pointer.x * size.width) / 2;
-    const mouseY = (pointer.y * size.height) / 2;
-
+    const mouseX = mouse.current.x;
+    const mouseY = mouse.current.y;
     const maxDistance = 120; // Hover radius
 
     for (let i = 0; i < numDots; i++) {
@@ -96,7 +108,7 @@ function Dots() {
       positions[idx] = curX;
       positions[idx + 1] = curY;
     }
-    // geomRef.current.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    
     geomRef.current.attributes.position.needsUpdate = true;
   });
 
@@ -119,24 +131,14 @@ function Dots() {
 }
 
 export function InteractiveGrid() {
-  const [domElement, setDomElement] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setDomElement(document.body);
-  }, []);
-
   return (
     <div className="z-0 absolute inset-0 w-full h-full pointer-events-none">
-      {domElement && (
-        <Canvas
-          orthographic
-          camera={{ position: [0, 0, 100], zoom: 1 }}
-          eventSource={domElement}
-          eventPrefix="client"
-        >
-          <Dots />
-        </Canvas>
-      )}
+      <Canvas
+        orthographic
+        camera={{ position: [0, 0, 100], zoom: 1 }}
+      >
+        <Dots />
+      </Canvas>
     </div>
   );
 }

@@ -4,27 +4,27 @@ import { Target, AppWindow, Type, Aperture } from 'lucide-react';
 
 export function CapabilitiesSection() {
   return (
-    <section className="w-full bg-background flex justify-center py-20 px-4 md:px-[60px]">
+    <section className="w-full bg-background flex justify-center py-10 md:py-20 px-4 md:px-[60px]">
       <div className="w-full max-w-[1320px] flex flex-col lg:flex-row rounded-[16px] overflow-hidden shadow-sm">
         
         {/* Left Side */}
-        <div className="w-full lg:w-1/2 bg-white p-8 md:p-12 lg:p-[48px] flex flex-col justify-between min-h-[519px]">
-          <h3 className="font-serif text-[32px] md:text-[40px] leading-[1.2] tracking-[-0.005em] text-[#00302E] max-w-[500px]">
+        <div className="w-full lg:w-1/2 bg-white p-6 sm:p-8 md:p-12 lg:p-[48px] flex flex-col justify-between">
+          <h3 className="font-serif text-[24px] sm:text-[30px] md:text-[40px] leading-[1.2] tracking-[-0.005em] text-[#00302E] max-w-[500px]">
             Somewhere between a mood board and a codebase, your brand happens.
           </h3>
           
-          <div className="flex flex-col gap-4 border-t border-[#DADADA] pt-8 mt-12">
-            <h4 className="font-serif text-[28px] md:text-[32px] font-medium leading-[1.2] tracking-[-0.003em] text-[#00302E]">
+          <div className="flex flex-col gap-3 md:gap-4 border-t border-[#DADADA] pt-6 md:pt-8 mt-6 md:mt-12">
+            <h4 className="font-serif text-[22px] sm:text-[26px] md:text-[32px] font-medium leading-[1.2] tracking-[-0.003em] text-[#00302E]">
               Design says it
             </h4>
-            <p className="font-sans text-[16px] leading-[24px] text-[#242D29]">
+            <p className="font-sans text-[15px] md:text-[16px] leading-[22px] md:leading-[24px] text-[#242D29]">
               Brand identity, logo systems, typography, UI design. We build the parts people actually see and remember. Every screen ties back to one system, not five different styles stitched together.
             </p>
           </div>
         </div>
 
         {/* Right Side */}
-        <div className="w-full lg:w-1/2 bg-[#FCCBA3] relative min-h-[519px] flex items-center justify-center overflow-hidden">
+        <div className="w-full lg:w-1/2 bg-[#FCCBA3] relative min-h-[340px] sm:min-h-[420px] lg:min-h-[519px] flex items-center justify-center overflow-hidden">
           
           {/* Main Image Container using percentages based on 660x519 */}
           <div className="absolute left-[27.7%] top-[17.9%] w-[46.2%] h-[64.3%] z-10 min-w-[200px]">

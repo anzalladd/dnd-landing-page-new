@@ -34,7 +34,7 @@ export function WorkSection() {
 
   return (
     <div className="w-full bg-white">
-      <section ref={containerRef} className="w-full max-w-[1440px] mx-auto px-4 md:px-[60px] pt-[80px] pb-[40px] flex flex-col gap-[60px]">
+      <section ref={containerRef} className="w-full max-w-[1440px] mx-auto px-4 md:px-[60px] pt-10 md:pt-[80px] pb-6 md:pb-[40px] flex flex-col gap-8 md:gap-[60px]">
       
       {/* Title */}
       <div className="max-w-[810px]">

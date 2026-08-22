@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function CtaSection() {
   return (
-    <section className="w-full bg-background flex justify-center py-[80px] px-4 md:px-[60px]">
+    <section className="w-full bg-background flex justify-center py-10 md:py-[80px] px-4 md:px-[60px]">
       <div className="w-full max-w-[1320px] flex flex-col items-center gap-10">
         
         {/* Main Image */}
