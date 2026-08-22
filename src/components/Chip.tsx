@@ -8,9 +8,11 @@ interface ChipProps {
   className?: string;
   title?: string;
   description?: string;
+  bgHex?: string;
+  textHex?: string;
 }
 
-export function Chip({ label, className = "", title, description }: ChipProps) {
+export function Chip({ label, className = "", title, description, bgHex = "#B5E96A", textHex = "#121212" }: ChipProps) {
   const chipRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
@@ -86,10 +88,11 @@ export function Chip({ label, className = "", title, description }: ChipProps) {
       {title && description && (
         <div 
           ref={cardRef} 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] bg-[#B5E96A] rounded-[24px] p-6 opacity-0 scale-75 pointer-events-none shadow-xl z-20 flex flex-col items-start text-left"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] rounded-[24px] p-6 opacity-0 scale-75 pointer-events-none shadow-xl z-20 flex flex-col items-start text-left"
+          style={{ backgroundColor: bgHex, color: textHex }}
         >
-          <h3 className="font-serif text-[24px] text-foreground mb-3 leading-tight">{title}</h3>
-          <p className="font-sans text-[14px] text-foreground leading-[1.4] opacity-90">{description}</p>
+          <h3 className="font-serif text-[24px] mb-3 leading-tight">{title}</h3>
+          <p className="font-sans text-[14px] leading-[1.4] opacity-90">{description}</p>
         </div>
       )}
     </div>

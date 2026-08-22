@@ -68,7 +68,7 @@ export function Hero() {
 
           <div ref={imageRef} className="z-10 relative w-full max-w-[759px] h-[382px]">
             <Image
-              src="/images/hero-illustration-76e12f.png"
+              src="/images/hero.png"
               alt="Hero Illustration"
               fill
               sizes="(max-width: 768px) 100vw, 759px"
@@ -81,53 +81,69 @@ export function Hero() {
           <div ref={chipsRef} className="hidden md:block absolute inset-0 pointer-events-none">
             {/* We enable pointer events only on the chips themselves */}
             <div className="relative w-full h-full pointer-events-none">
-              <Chip 
-                label="/logo-&-brandmark" 
-                title="Logo & Brandmark" 
+              <Chip
+                label="/logo-&-brandmark"
+                title="Logo & Brandmark"
                 description="A distinctive and memorable mark that captures the very essence of your business."
-                className="top-[-2%] left-[23%] pointer-events-auto" 
+                className="top-[-2%] left-[23%] pointer-events-auto"
+                bgHex="#BAAF8B"
+                textHex="#121212"
               />
-              <Chip 
-                label="/web-development" 
-                title="Web Development" 
+              <Chip
+                label="/web-development"
+                title="Web Development"
                 description="Robust, scalable code and architecture tailored to modern web standards."
-                className="top-[-2%] left-[46.5%] pointer-events-auto" 
+                className="top-[-2%] left-[46.5%] pointer-events-auto"
+                bgHex="#FA8DD8"
+                textHex="#121212"
               />
-              <Chip 
-                label="/visual-identity" 
-                title="Visual Identity" 
+              <Chip
+                label="/visual-identity"
+                title="Visual Identity"
                 description="A visual language that gives your brand a distinct look across every touchpoint."
-                className="top-[17.5%] left-[11.5%] pointer-events-auto" 
+                className="top-[17.5%] left-[11.5%] pointer-events-auto"
+                bgHex="#AFE877"
+                textHex="#00302E"
               />
-              <Chip 
-                label="/no-code-development" 
-                title="No-code Development" 
+              <Chip
+                label="/no-code-development"
+                title="No-code Development"
                 description="Fast and flexible builds using powerful no-code platforms for rapid delivery."
-                className="top-[17.5%] left-[78%] pointer-events-auto" 
+                className="top-[17.5%] left-[78%] pointer-events-auto"
+                bgHex="#FF814A"
+                textHex="#121212"
               />
-              <Chip 
-                label="/interface-design" 
-                title="Interface Design" 
+              <Chip
+                label="/interface-design"
+                title="Interface Design"
                 description="Intuitive and pixel-perfect user experiences crafted with precision."
-                className="top-[44%] left-[7%] pointer-events-auto" 
+                className="top-[44%] left-[7%] pointer-events-auto"
+                bgHex="#AD8FFF"
+                textHex="#121212"
               />
-              <Chip 
-                label="/ecommerce-development" 
-                title="Ecommerce Development" 
+              <Chip
+                label="/ecommerce-development"
+                title="Ecommerce Development"
                 description="Seamless shopping experiences engineered to drive conversions and sales."
-                className="top-[44%] left-[79%] pointer-events-auto" 
+                className="top-[44%] left-[79%] pointer-events-auto"
+                bgHex="#B3D6D3"
+                textHex="#121212"
               />
-              <Chip 
-                label="/typography-system" 
-                title="Typography System" 
+              <Chip
+                label="/typography-system"
+                title="Typography System"
                 description="Harmonious font pairings and hierarchies that elevate readability and style."
-                className="top-[70%] left-[9.5%] pointer-events-auto" 
+                className="top-[70%] left-[9.5%] pointer-events-auto"
+                bgHex="#611FD8"
+                textHex="#FFFFFF"
               />
-              <Chip 
-                label="/webGL-development" 
-                title="WebGL Development" 
+              <Chip
+                label="/webGL-development"
+                title="WebGL Development"
                 description="Immersive 3D web experiences using cutting-edge rendering technologies."
-                className="top-[70%] left-[77.5%] pointer-events-auto" 
+                className="top-[70%] left-[77.5%] pointer-events-auto"
+                bgHex="#00302E"
+                textHex="#C1F003"
               />
             </div>
           </div>
