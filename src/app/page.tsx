@@ -1,21 +1,10 @@
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { WorkSection } from "@/components/WorkSection";
-import { AboutSection } from "@/components/AboutSection";
-import { CapabilitiesSection } from "@/components/CapabilitiesSection";
-import { CtaSection } from "@/components/CtaSection";
-import { Footer } from "@/components/Footer";
-
 export default function Home() {
   return (
-    <main className="relative bg-background selection:bg-[#00302E] min-h-screen selection:text-[#F7F5ED]">
-      <Navbar />
-      <Hero />
-      <WorkSection />
-      <AboutSection />
-      <CapabilitiesSection />
-      <CtaSection />
-      <Footer />
+    <main className="flex justify-center items-center h-[800vh] min-h-screen">
+      <div className="space-y-4 text-center">
+        <h1 className="font-bold text-4xl">Blank Canvas</h1>
+        <p className="text-gray-500">Ready to explore Lenis and GSAP</p>
+      </div>
     </main>
   );
 }

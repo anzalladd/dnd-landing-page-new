@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, EB_Garamond } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { SmoothScroll } from "@/components/SmoothScroll";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const ebGaramond = EB_Garamond({
-  variable: "--font-eb-garamond",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
-  title: "D&D Website",
-  description: "Branding, Product Design & Code. Under one roof.",
+  title: "Lenis & GSAP Exploration",
+  description: "A blank canvas for exploring Lenis and GSAP",
 };
 
 export default function RootLayout({
@@ -25,11 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#F7F5ED] text-[#00302E]">
-      <body className={`${inter.variable} ${ebGaramond.variable} font-sans antialiased overflow-x-hidden`}>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+    <html lang="en">
+      <body className={`${inter.variable} font-sans antialiased min-h-screen bg-white text-black`}>
+        {children}
       </body>
     </html>
   );
