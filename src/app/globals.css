@@ -3,25 +3,27 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-eb-garamond), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-signifier: var(--font-signifier-local), ui-serif, Georgia, serif;
 
-  --color-background: #F7F5ED;
-  --color-foreground: #00302E;
-  --color-foreground-muted: #012625;
+  --color-gray-900: #121212;
+  --color-gray-800: #383536;
+  --color-gray-100: #F7F6F6;
+  --color-brand-green: #C1F003;
+  --color-card-dark: #3D3B34;
+  --color-card-light: #F1F5ED;
+  --color-card-blue: #BADBEE;
+  --color-card-black: #0F0E0B;
+  --color-card-green: #D5FAD3;
 }
 
-/* Base styles for Lenis */
-html.lenis, html.lenis body {
-  height: auto;
+@layer utilities {
+  .font-signifier {
+    font-family: var(--font-signifier-local), ui-serif, Georgia, serif !important;
+  }
 }
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
+
+@layer utilities {
+  .bento-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+  }
 }
