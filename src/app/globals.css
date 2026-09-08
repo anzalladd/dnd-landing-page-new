@@ -109,3 +109,19 @@
     100% { transform: translateY(300%); }
   }
 }
+
+@layer utilities {
+  /* The ticker renders its list twice; translating by exactly -50% lands copy 2
+     where copy 1 started, so the loop has no seam. */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[marquee_28s_linear_infinite\],
+  .animate-\[scroll-hint_1\.8s_ease-in-out_infinite\] {
+    animation: none !important;
+  }
+}

@@ -10,31 +10,38 @@ interface Dot {
 }
 
 interface Particle {
-  /** Assembled position, normalised 0..1 within the canvas box. */
+  /** Assembled position, normalised 0..1 within the *bird* box. */
   tx: number;
   ty: number;
-  /** Where this particle waits before the bird forms. */
+  /** Resting position, normalised 0..1 across the *whole canvas*. */
   sx: number;
   sy: number;
   /** Unit vector used when the bird bursts apart. */
   bx: number;
   by: number;
-  /** 0..STAGGER_SPAN — offsets this particle's arrival within the assemble. */
+  /** 0..STAGGER_SPAN - offsets this particle's arrival within the assemble. */
   lag: number;
+  /** Per-particle drift, so the resting field never looks like a still image. */
+  driftAmp: number;
+  driftSpeed: number;
+  driftPhase: number;
+  /** Varied so the resting field reads as depth rather than a flat sheet. */
+  restAlpha: number;
+  size: number;
   color: string;
 }
 
 /**
  * Mutable state the parent animates with GSAP. Passing this instead of props
- * keeps the scroll scrub off React's render path entirely — 4,886 particles
+ * keeps the scroll scrub off React's render path entirely - 4,886 particles
  * repositioned per frame, zero re-renders.
  */
 export type BirdDrive = {
-  /** 0 = scattered dust, 1 = bird fully formed. */
+  /** 0 = drifting dust across the viewport, 1 = bird fully formed. */
   assemble: number;
   /** 0 = intact, 1 = blown outward past the viewport. */
   burst: number;
-  /** Extra wander, used for the idle breath and pointer push. */
+  /** Extra wander layered on top of the per-particle drift. */
   jitter: number;
 };
 
@@ -88,20 +95,26 @@ export function ParticleBird({
     let height = 0;
     let particles: Particle[] = [];
 
-    // Positions are normalised, so a resize only needs new canvas dimensions —
+    // Positions are normalised, so a resize only needs new canvas dimensions -
     // the particle set itself survives untouched.
     const build = () => {
       particles = dots.map((dot) => {
         const angle = Math.random() * Math.PI * 2;
-        const radius = 0.6 + Math.random() * 1.1;
         return {
           tx: dot.x,
           ty: dot.y,
-          sx: 0.5 + Math.cos(angle) * radius,
-          sy: 0.5 + Math.sin(angle) * radius * 0.75,
+          // Spread across the entire canvas, not a box around the bird, so the
+          // resting state is a field you are standing inside of.
+          sx: Math.random(),
+          sy: Math.random(),
           bx: Math.cos(angle),
           by: Math.sin(angle),
           lag: Math.random() * STAGGER_SPAN,
+          driftAmp: 6 + Math.random() * 22,
+          driftSpeed: 0.25 + Math.random() * 0.55,
+          driftPhase: Math.random() * Math.PI * 2,
+          restAlpha: 0.18 + Math.random() * 0.5,
+          size: dotSize * (0.7 + Math.random() * 0.7),
           color: dot.color,
         };
       });
@@ -133,37 +146,47 @@ export function ParticleBird({
       if (!width || !height) return;
       ctx.clearRect(0, 0, width, height);
 
-      let drawW = width;
-      let drawH = width / ASPECT;
-      if (drawH > height) {
-        drawH = height;
-        drawW = height * ASPECT;
+      // The bird occupies a comfortable share of the frame rather than the
+      // whole thing, so the headline still has somewhere to sit.
+      const boxW = width * 0.72;
+      const boxH = height * 0.72;
+      let drawW = boxW;
+      let drawH = boxW / ASPECT;
+      if (drawH > boxH) {
+        drawH = boxH;
+        drawW = boxH * ASPECT;
       }
       const offX = (width - drawW) / 2;
       const offY = (height - drawH) / 2;
 
       const { assemble, burst, jitter } = drive;
       const burstPush = burst * Math.max(width, height) * 1.2;
-      const time = performance.now() * 0.0006;
+      const time = performance.now() * 0.001;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
         // Each particle runs the same 0..1 curve, offset by its lag, so the
-        // bird knits together from scattered dust instead of snapping in.
+        // bird knits together from the field instead of snapping in.
         let t = (assemble - p.lag) / (1 - STAGGER_SPAN);
         t = t < 0 ? 0 : t > 1 ? 1 : t;
         const eased = 1 - Math.pow(1 - t, 3);
 
-        const nx = p.sx + (p.tx - p.sx) * eased;
-        const ny = p.sy + (p.ty - p.sy) * eased;
+        // Rest position is canvas-space; assembled position is bird-space.
+        const restX = p.sx * width;
+        const restY = p.sy * height;
+        const birdX = offX + p.tx * drawW;
+        const birdY = offY + p.ty * drawH;
 
-        let x = offX + nx * drawW;
-        let y = offY + ny * drawH;
+        let x = restX + (birdX - restX) * eased;
+        let y = restY + (birdY - restY) * eased;
 
-        if (jitter) {
-          x += Math.sin(time + i) * jitter;
-          y += Math.cos(time * 1.3 + i) * jitter;
+        // Drift is loudest at rest and settles as the bird resolves - the field
+        // is alive before you scroll, and still once it has become something.
+        const amp = p.driftAmp * (1 - eased) + jitter;
+        if (amp) {
+          x += Math.sin(time * p.driftSpeed + p.driftPhase) * amp;
+          y += Math.cos(time * p.driftSpeed * 0.8 + p.driftPhase) * amp;
         }
 
         if (burst) {
@@ -175,18 +198,19 @@ export function ParticleBird({
           const dx = x - pointer.current.x;
           const dy = y - pointer.current.y;
           const distSq = dx * dx + dy * dy;
-          // Only particles inside a ~110px radius are displaced.
-          if (distSq < 12100 && distSq > 0.01) {
+          // Only particles inside a ~140px radius are displaced.
+          if (distSq < 19600 && distSq > 0.01) {
             const dist = Math.sqrt(distSq);
-            const force = (1 - dist / 110) * 42;
+            const force = (1 - dist / 140) * 55;
             x += (dx / dist) * force;
             y += (dy / dist) * force;
           }
         }
 
-        ctx.globalAlpha = eased * (1 - burst);
+        // Dust is dim and uneven; the assembled bird is solid.
+        ctx.globalAlpha = (p.restAlpha + (1 - p.restAlpha) * eased) * (1 - burst);
         ctx.fillStyle = p.color;
-        ctx.fillRect(x, y, dotSize, dotSize);
+        ctx.fillRect(x, y, p.size, p.size);
       }
 
       ctx.globalAlpha = 1;
