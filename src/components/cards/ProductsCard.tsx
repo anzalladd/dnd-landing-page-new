@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Pill } from "@/components/ui/Pill";
 

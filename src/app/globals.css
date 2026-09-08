@@ -14,16 +14,98 @@
   --color-card-blue: #BADBEE;
   --color-card-black: #0F0E0B;
   --color-card-green: #D5FAD3;
+
+  /* The story acts play on ink; the hub resolves to paper. */
+  --color-ink: #0B0B09;
+  --color-ink-soft: #16150F;
+  --color-paper: #FFFFFF;
 }
 
 @layer utilities {
   .font-signifier {
     font-family: var(--font-signifier-local), ui-serif, Georgia, serif !important;
   }
+
+  .bento-grid {
+    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+  }
+}
+
+@layer base {
+  html {
+    /* ScrollSmoother drives scrolling; native smooth would fight it. */
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: var(--color-ink);
+  }
+
+  /* The real cursor is replaced by <Cursor />. Kept on touch/coarse pointers,
+     where there is no cursor to replace and hiding it does nothing useful. */
+  @media (hover: hover) and (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+      cursor: none !important;
+    }
+  }
+
+  ::selection {
+    background: var(--color-brand-green);
+    color: var(--color-ink);
+  }
 }
 
 @layer utilities {
-  .bento-grid {
-    @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+  /* SplitText writes lines into these; the mask is what makes copy rise into
+     view rather than just fade. */
+  .split-line-mask {
+    overflow: hidden;
+    display: block;
+    padding-bottom: 0.08em;
+  }
+
+  /* Set before JS runs so nothing flashes unmasked on a slow hydrate. */
+  .reveal-pending {
+    opacity: 0;
+  }
+
+  .act-pin {
+    will-change: transform;
+  }
+
+  /* Grain sits over everything and costs one composited layer. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain-shift 0.6s steps(2) infinite;
+  }
+
+  @keyframes grain-shift {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-1.5%, 1.5%); }
+    100% { transform: translate(1%, -1%); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after {
+    animation: none;
+  }
+
+  .reveal-pending {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  @keyframes scroll-hint {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(300%); }
   }
 }
