@@ -9,10 +9,19 @@ interface Dot {
   color: string;
 }
 
+interface Particle {
+  tx: number;
+  ty: number;
+  cx: number;
+  cy: number;
+  color: string;
+  alpha: number;
+}
+
 export const BirdScatter = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dots, setDots] = useState<Dot[]>([]);
-  const particlesRef = useRef<any[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
 
   useEffect(() => {
     fetch("/bird-dots.json")
@@ -31,7 +40,7 @@ export const BirdScatter = () => {
     // The bounds where the bird is drawn
     const width = 334;
     const height = 271;
-    
+
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -47,7 +56,7 @@ export const BirdScatter = () => {
       color: dot.color,
       alpha: 0,
     }));
-    
+
     particlesRef.current = particles;
 
     const render = () => {
@@ -66,8 +75,8 @@ export const BirdScatter = () => {
     // Animate assembling the bird
     gsap.to(particles, {
       duration: 2,
-      cx: (i, t) => t.tx,
-      cy: (i, t) => t.ty,
+      cx: (i: number, t: Particle) => t.tx,
+      cy: (i: number, t: Particle) => t.ty,
       alpha: 1,
       stagger: {
         amount: 1.5,
@@ -83,31 +92,31 @@ export const BirdScatter = () => {
 
   const handleMouseEnter = () => {
     if (!particlesRef.current.length) return;
-    
+
     // Scatter slightly on hover
     gsap.to(particlesRef.current, {
       duration: 0.5,
-      cx: (i, t) => t.tx + (Math.random() - 0.5) * 20,
-      cy: (i, t) => t.ty + (Math.random() - 0.5) * 20,
+      cx: (i: number, t: Particle) => t.tx + (Math.random() - 0.5) * 20,
+      cy: (i: number, t: Particle) => t.ty + (Math.random() - 0.5) * 20,
       ease: "power1.out",
     });
   };
 
   const handleMouseLeave = () => {
     if (!particlesRef.current.length) return;
-    
+
     // Return to original position
     gsap.to(particlesRef.current, {
       duration: 0.8,
-      cx: (i, t) => t.tx,
-      cy: (i, t) => t.ty,
-      ease: "elastic.out(1, 0.3)",
+      cx: (i: number, t: Particle) => t.tx,
+      cy: (i: number, t: Particle) => t.ty,
+      ease: "power3.out",
     });
   };
 
   return (
-    <div 
-      className="absolute top-[100px] left-4 w-[334px] h-[271px] cursor-pointer"
+    <div
+      className="absolute w-[334px] h-[271px] cursor-pointer transition-all duration-700 ease-in-out top-[100px] left-4 [.details-banner_&]:left-1/2 [.details-banner_&]:top-1/2 [.details-banner_&]:-translate-x-1/2 [.details-banner_&]:-translate-y-1/2"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
